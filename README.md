@@ -8,6 +8,15 @@ Baltimore CyberTrust root, the only root the faucet's ZentriOS Wi-Fi module trus
 faucet itself still works. Give it a CA it trusts and a DNS name that points at your
 broker, and this integration does the rest.
 
+> [!IMPORTANT]
+> **Installing the integration is the easy part.** Before it can do anything, the
+> faucet needs a new trusted CA, your router needs a DNS override, and your MQTT
+> broker needs a TLS 1.0 listener. Expect about an hour of work outside Home
+> Assistant, and some comfort with your router and broker settings.
+> [docs/SETUP.md](docs/SETUP.md) walks through it, and
+> [`scripts/faucet_setup.py`](scripts/faucet_setup.py) does the faucet side for
+> you, telling you when to switch Wi-Fi networks.
+
 ## What you get
 
 | Entity | Notes |
