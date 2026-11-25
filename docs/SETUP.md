@@ -43,6 +43,12 @@ So we change two things, and leave the faucet's controller alone:
 
 The faucet then connects to your broker, thinking it is Azure.
 
+The [ZentriOS reference](https://web.archive.org/web/20240301034423/https://docs.zentri.com/zentrios/w/latest/) (archived) documents
+every module command used here. The faucet's MQTT commands were first found by
+Velaar in the
+[r/homeassistant thread](https://www.reddit.com/r/homeassistant/comments/101lp3w/controlling_delta_voice_iq_faucet_from_ha/);
+see the README's credits for everyone else.
+
 ## 1. Make certificates
 
 ```sh

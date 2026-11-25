@@ -79,13 +79,41 @@ crash it. Push files with its `http_download` command instead.
 Add this repository to HACS as a custom integration repository, install **Local Delta
 Faucet**, restart, then add the integration and enter the faucet's Wi-Fi MAC.
 
-## Credit
-
-The dispense command and the CA swap come from u/Velaar's write-up on r/homeassistant.
-
 ## Dashboard card
 
 `dashboard/card.yaml` is an animated Mushroom card adapted from
 [Umerr/delta-voiceiq-2.0-ha](https://github.com/Umerr/delta-voiceiq-2.0-ha)
 (MIT). Tap toggles the water; long press opens dispense presets. It needs
 Mushroom, card-mod and browser_mod from HACS.
+
+## Credits and thanks
+
+None of this started from scratch. Thank you to everyone who took these faucets
+apart before us and wrote it down:
+
+- **u/yocool86 and everyone in the r/homeassistant thread**
+  [Controlling Delta Voice IQ faucet from HA](https://www.reddit.com/r/homeassistant/comments/101lp3w/controlling_delta_voice_iq_faucet_from_ha/),
+  especially **u/Velaar**, whose comments there showed the faucet's local MQTT
+  commands (found in its firmware, easter egg included) and the ZentriOS HTTP
+  API that made the CA swap possible, and whose
+  [gist](https://gist.github.com/velaar/4e18a200c1db7b06109a3fd840838684) set up
+  Delta's cloud API in Home Assistant.
+- **[pvmac2194](https://gist.github.com/pvmac2194/d1f8d6fcdecd7cef2843ad7ce138f1ce)**,
+  for the write-up of Delta's cloud API.
+- **[Umerr/delta-voiceiq-2.0-ha](https://github.com/Umerr/delta-voiceiq-2.0-ha)**
+  (MIT), for the cloud API notes, hand-wash timings and the dashboard card that
+  `dashboard/card.yaml` is adapted from.
+- **[@Anashost](https://github.com/Anashost/HA-Animated-cards)**, for the card
+  animation styling.
+- **[evantobin/homebridge-voiceiq](https://github.com/evantobin/homebridge-voiceiq)**,
+  the Homebridge plugin, for its view of the cloud API.
+- **Zentri / Silicon Labs**, for the 
+  [ZentriOS command and variable reference](https://web.archive.org/web/20240301034423/https://docs.zentri.com/zentrios/w/latest/) (archived; the original
+  site is gone),
+  without which the CA swap would have been guesswork.
+- **Microsoft**, for documenting the
+  [IoT Hub move off Baltimore CyberTrust](https://learn.microsoft.com/azure/iot-hub/migrate-tls-certificate),
+  which explained why the faucets went quiet.
+
+Delta, VoiceIQ and Touch2O are trademarks of Delta Faucet Company. This project is
+not affiliated with or endorsed by Delta.
