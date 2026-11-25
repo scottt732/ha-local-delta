@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0](https://github.com/scottt732/ha-local-delta/compare/v0.2.0...v0.3.0) (2026-11-25)
+
+
+### Added
+
+* add a brand icon, a setup guide and a guided setup script ([e99ea9f](https://github.com/scottt732/ha-local-delta/commit/e99ea9f23ac02e5b22778e29879782eb5ca3cc43))
+
+
+### Fixed
+
+* keep sensor values across Home Assistant restarts ([26c2e0e](https://github.com/scottt732/ha-local-delta/commit/26c2e0e13f800e7128969468aa70a4b4e11120de))
+
+
+### Documentation
+
+* credit everyone whose work this builds on ([e0843ef](https://github.com/scottt732/ha-local-delta/commit/e0843eff7da5918f361c0b9b5def39fa6cd89608))
+
 ## [0.2.0](https://github.com/scottt732/ha-local-delta/compare/v0.1.0...v0.2.0) (2026-11-25)
 
 
