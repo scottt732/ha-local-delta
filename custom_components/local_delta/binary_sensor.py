@@ -1,4 +1,4 @@
-"""Binary sensors: broker connection, and water running if the faucet reports it."""
+"""Binary sensor: whether the faucet is connected to the broker."""
 
 from __future__ import annotations
 
@@ -31,12 +31,6 @@ BINARY_SENSORS = (
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
         value=lambda s: s.connected,
-    ),
-    LocalDeltaBinarySensorDescription(
-        key="water_running",
-        translation_key="water_running",
-        device_class=BinarySensorDeviceClass.RUNNING,
-        value=lambda s: s.water_on,
     ),
 )
 

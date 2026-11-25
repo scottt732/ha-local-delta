@@ -12,11 +12,12 @@ broker, and this integration does the rest.
 
 | Entity | Notes |
 | --- | --- |
+| **Water** switch | Opens and closes the valve. The handle must be in the open position. The faucet never reports its valve, so the switch shows the last command sent. |
 | **Dispense** button | Runs the amount set on *Dispense amount*. |
 | **Dispense amount** | In fl. oz. on a US customary system, mL otherwise. |
 | **Connected** | From the broker's client connect/disconnect events (see below). |
 | **Faucet firmware**, **Firmware bundle**, **Last reset reason** | From the status report the faucet sends when it connects. |
-| **Last usage**, **Water running** | Only fill in if your faucet reports them. Ours has not yet. |
+| **Last usage** | Only fills in if your faucet reports usage. Ours has not; Delta's cloud computed usage itself. |
 
 Actions:
 
@@ -36,6 +37,12 @@ Actions:
 - **Commands are matched as literal text.** `{"dispense": "100"}` runs 100 mL;
   `{"dispense":"100"}`, without the space, is delivered and silently ignored. This
   integration always sends the spaced form, so build raw commands the same way.
+- Known commands, which mirror Delta's cloud API (`Dispense`, `changeState`):
+
+  | Command | Effect |
+  | --- | --- |
+  | `{"dispense": "<mL>"}` | Runs that many mL, then closes. |
+  | `{"state": "on"}` / `{"state": "off"}` | Opens or closes the valve. |
 
 ## Broker setup
 

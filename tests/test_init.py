@@ -85,3 +85,16 @@ async def test_button_sends_the_number_amount(hass: HomeAssistant, entry, mqtt_m
 
 async def test_unload(hass: HomeAssistant, entry):
     assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_water_switch(hass: HomeAssistant, entry, mqtt_mock):
+    await hass.services.async_call(
+        "switch", "turn_on", {"entity_id": "switch.kitchen_faucet_water"}, blocking=True
+    )
+    assert mqtt_mock.async_publish.call_args.args[:3] == (TOPIC, '{"state": "on"}', 0)
+    assert hass.states.get("switch.kitchen_faucet_water").state == "on"
+    await hass.services.async_call(
+        "switch", "turn_off", {"entity_id": "switch.kitchen_faucet_water"}, blocking=True
+    )
+    assert mqtt_mock.async_publish.call_args.args[:3] == (TOPIC, '{"state": "off"}', 0)
+    assert hass.states.get("switch.kitchen_faucet_water").state == "off"

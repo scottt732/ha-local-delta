@@ -29,7 +29,13 @@ from .const import (
 from .protocol import SUPPORTED_UNITS, to_milliliters
 from .runtime import Faucet
 
-PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.NUMBER, Platform.SENSOR]
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.NUMBER,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 type LocalDeltaConfigEntry = ConfigEntry[Faucet]

@@ -84,3 +84,10 @@ def test_non_json_is_ignored():
     state = FaucetState()
     assert not state.apply_event(b"\x00garbage")
     assert state.connected is None
+
+
+def test_state_payload_keeps_the_space():
+    from custom_components.local_delta.protocol import state_payload
+
+    assert state_payload(True) == '{"state": "on"}'
+    assert state_payload(False) == '{"state": "off"}'

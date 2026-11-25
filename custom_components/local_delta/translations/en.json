@@ -31,8 +31,10 @@
   },
   "entity": {
     "binary_sensor": {
-      "connected": { "name": "Connected" },
-      "water_running": { "name": "Water running" }
+      "connected": { "name": "Connected" }
+    },
+    "switch": {
+      "water": { "name": "Water" }
     },
     "button": {
       "dispense": { "name": "Dispense" }

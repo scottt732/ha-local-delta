@@ -8,7 +8,13 @@ from collections.abc import Callable
 from homeassistant.components import mqtt
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
 
-from .protocol import FaucetState, command_topic, dispense_payload, events_topic
+from .protocol import (
+    FaucetState,
+    command_topic,
+    dispense_payload,
+    events_topic,
+    state_payload,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -75,6 +81,12 @@ class Faucet:
 
     async def async_dispense(self, milliliters: int) -> None:
         await self.async_send_command(dispense_payload(milliliters))
+
+    async def async_set_water(self, on: bool) -> None:
+        await self.async_send_command(state_payload(on))
+        # The faucet does not report its valve, so remember what we asked for.
+        self.state.water_on = on
+        self._notify()
 
     async def async_send_command(self, payload: str) -> None:
         _LOGGER.debug("Sending %s to faucet %s", payload, self.device_id)

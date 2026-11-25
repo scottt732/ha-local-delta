@@ -71,6 +71,15 @@ def dispense_payload(milliliters: int) -> str:
     return f'{{"dispense": "{int(milliliters)}"}}'
 
 
+def state_payload(on: bool) -> str:
+    """Build the water on/off command, spaced like ``dispense_payload``.
+
+    The handle must be in the open position; the command only opens and closes the
+    valve.
+    """
+    return f'{{"state": "{"on" if on else "off"}"}}'
+
+
 @dataclass
 class FaucetState:
     """Everything the faucet has told us since Home Assistant started."""
