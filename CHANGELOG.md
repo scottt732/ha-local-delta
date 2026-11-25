@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/scottt732/ha-local-delta/compare/v0.2.0...v0.2.1) (2026-11-25)
+
+
+### Fixed
+
+* keep sensor values across Home Assistant restarts ([26c2e0e](https://github.com/scottt732/ha-local-delta/commit/26c2e0e13f800e7128969468aa70a4b4e11120de))
+
 ## [0.2.0](https://github.com/scottt732/ha-local-delta/compare/v0.1.0...v0.2.0) (2026-11-25)
 
 
