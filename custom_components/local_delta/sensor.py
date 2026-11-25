@@ -6,8 +6,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from homeassistant.components.sensor import (
+    RestoreSensor,
     SensorDeviceClass,
-    SensorEntity,
     SensorEntityDescription,
 )
 from homeassistant.const import EntityCategory, UnitOfVolume
@@ -72,9 +72,22 @@ async def async_setup_entry(
     async_add_entities(LocalDeltaSensor(entry.runtime_data, d) for d in SENSORS)
 
 
-class LocalDeltaSensor(LocalDeltaEntity, SensorEntity):
+class LocalDeltaSensor(LocalDeltaEntity, RestoreSensor):
+    """The faucet reports these only when it connects, so keep the last value.
+
+    Without restoring, every Home Assistant restart blanks them until the faucet
+    next reconnects, which can be days.
+    """
+
     entity_description: LocalDeltaSensorDescription
+    _restored: str | float | None = None
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        if (last := await self.async_get_last_sensor_data()) is not None:
+            self._restored = last.native_value  # type: ignore[assignment]
 
     @property
     def native_value(self) -> str | float | None:
-        return self.entity_description.value(self.faucet.state)
+        live = self.entity_description.value(self.faucet.state)
+        return self._restored if live is None else live
