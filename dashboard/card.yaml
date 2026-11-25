@@ -1,0 +1,161 @@
+# Local Delta faucet - animated dashboard card
+#
+# Adapted from Umerr/delta-voiceiq-2.0-ha (MIT). Animation styling credit:
+# @Anashost, https://github.com/Anashost/HA-Animated-cards
+#
+# Requires these HACS frontend plugins: Mushroom, card-mod, browser_mod
+# (browser_mod only for the long-press popup).
+#
+# Before pasting into the raw config editor:
+#   - Replace kitchen_faucet in the entity IDs with your faucet's slug.
+#   - Replace YOUR_DEVICE_ID with the faucet's device ID (Settings > Devices,
+#     open the faucet; the ID is the last part of the URL).
+#
+# Tap toggles the water (the handle must be open). Long press opens dispense
+# presets. The faucet reports no usage, so unlike the cloud card there are no
+# usage stats or fill level; the badge shows FLOWING or OFF.
+
+type: custom:mushroom-entity-card
+entity: switch.kitchen_faucet_water
+name: Kitchen Faucet
+icon: mdi:faucet
+primary_info: name
+secondary_info: none
+icon_color: light-grey
+grid_options:
+  rows: 2
+tap_action:
+  action: toggle
+hold_action:
+  action: fire-dom-event
+  browser_mod:
+    service: browser_mod.popup
+    data:
+      title: Kitchen Faucet
+      size: normal
+      content:
+        type: vertical-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: switch.kitchen_faucet_water
+            name: Water
+            icon: mdi:faucet
+            tap_action:
+              action: toggle
+            layout: horizontal
+            icon_color: blue
+            secondary_info: state
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Glass
+                secondary: 12 fl. oz.
+                icon: mdi:cup-water
+                icon_color: cyan
+                layout: vertical
+                tap_action:
+                  action: perform-action
+                  perform_action: local_delta.dispense
+                  data: {device_id: YOUR_DEVICE_ID, amount: 12, unit: fl. oz.}
+                card_mod: &press
+                  style: "ha-card { cursor: pointer; } ha-card:active { transform: scale(0.95); }"
+              - type: custom:mushroom-template-card
+                primary: Coffee Pot
+                secondary: 4 cups
+                icon: mdi:coffee-maker
+                icon_color: amber
+                layout: vertical
+                tap_action:
+                  action: perform-action
+                  perform_action: local_delta.dispense
+                  data: {device_id: YOUR_DEVICE_ID, amount: 4, unit: cups}
+                card_mod: *press
+              - type: custom:mushroom-template-card
+                primary: Pot
+                secondary: 1 gal
+                icon: mdi:pot-steam
+                icon_color: teal
+                layout: vertical
+                tap_action:
+                  action: perform-action
+                  perform_action: local_delta.dispense
+                  data: {device_id: YOUR_DEVICE_ID, amount: 1, unit: gal}
+                card_mod: *press
+              - type: custom:mushroom-template-card
+                entity: number.kitchen_faucet_dispense_amount
+                primary: Custom
+                secondary: "{{ states(entity) }} {{ state_attr(entity, 'unit_of_measurement') }}"
+                icon: mdi:water-pump
+                icon_color: deep-purple
+                layout: vertical
+                tap_action:
+                  action: perform-action
+                  perform_action: button.press
+                  target: {entity_id: button.kitchen_faucet_dispense}
+                hold_action:
+                  action: more-info
+                card_mod: *press
+
+card_mod:
+  style:
+    ".": |
+      ha-card{
+        {% set on = is_state('switch.kitchen_faucet_water', 'on') %}
+        {% set c = '33,150,243' if on else '158,158,158' %}
+        --fc-color:{{ c }};
+        --fc-level:{{ '60%' if on else '0%' }};
+        --fc-badge-content:"{{ 'FLOWING' if on else 'OFF' }}";
+        --fc-anim-shake:{{ 'faucet-vibrate 0.6s ease-in-out infinite' if on else 'none' }};
+        --fc-anim-wave:{{ 'wave 3s linear infinite' if on else 'none' }};
+        --fc-anim-overlay:{{ 'bubbles 0.8s linear infinite' if on else 'none' }};
+        --fc-overlay-bg:{{ 'radial-gradient(2px 2px at 30% 75%,white,transparent),radial-gradient(2px 2px at 60% 65%,white,transparent)' if on else 'none' }};
+        transition:all 0.5s ease;
+        overflow:hidden;
+      }
+      ha-card::before{
+        content:var(--fc-badge-content);
+        position:absolute;top:8px;right:8px;
+        background:rgba(var(--fc-color),0.15);
+        color:rgb(var(--fc-color));
+        border:1px solid rgba(var(--fc-color),0.3);
+        padding:2px 8px;border-radius:12px;
+        font-weight:600;letter-spacing:0.5px;font-size:10px;
+        z-index:2;
+      }
+    "mushroom-shape-icon$": |
+      .shape{
+        --icon-size:56px !important;
+        background:rgba(255,255,255,0.05) !important;
+        overflow:hidden;position:relative;
+        border:1px solid rgba(255,255,255,0.1);
+        animation:var(--fc-anim-shake) !important;
+        transform-origin:50% 40%;
+      }
+      .shape::before{
+        content:'';position:absolute;left:-50%;
+        width:200%;height:200%;
+        top:calc(100% - var(--fc-level));
+        background:rgba(var(--fc-color),0.6);
+        border-radius:40%;
+        animation:var(--fc-anim-wave);
+      }
+      .shape::after{
+        content:'';position:absolute;inset:0;
+        background-image:var(--fc-overlay-bg);
+        animation:var(--fc-anim-overlay);
+        z-index:2;
+      }
+      ha-icon{ z-index:3; position:relative; }
+      @keyframes wave{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+      @keyframes faucet-vibrate{
+        0%,100%{transform:translateX(0) rotate(0deg)}
+        20%{transform:translateX(-1px) rotate(-1deg)}
+        40%{transform:translateX(1px) rotate(1deg)}
+        60%{transform:translateX(-0.5px) rotate(-0.5deg)}
+        80%{transform:translateX(0.5px) rotate(0.5deg)}
+      }
+      @keyframes bubbles{
+        0%{transform:translateY(8px);opacity:0}
+        40%{opacity:0.9}
+        100%{transform:translateY(-18px);opacity:0}
+      }

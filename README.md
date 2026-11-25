@@ -73,3 +73,10 @@ Faucet**, restart, then add the integration and enter the faucet's Wi-Fi MAC.
 ## Credit
 
 The dispense command and the CA swap come from u/Velaar's write-up on r/homeassistant.
+
+## Dashboard card
+
+`dashboard/card.yaml` is an animated Mushroom card adapted from
+[Umerr/delta-voiceiq-2.0-ha](https://github.com/Umerr/delta-voiceiq-2.0-ha)
+(MIT). Tap toggles the water; long press opens dispense presets. It needs
+Mushroom, card-mod and browser_mod from HACS.
