@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add a Delta faucet",
+        "description": "The faucet must already connect to the MQTT broker Home Assistant uses. Enter its Wi-Fi MAC address.",
+        "data": {
+          "name": "Name",
+          "device_id": "Wi-Fi MAC address"
+        }
+      }
+    },
+    "error": {
+      "invalid_device_id": "Enter a 12-digit MAC address, such as 60:A4:23:00:00:01."
+    },
+    "abort": {
+      "already_configured": "This faucet is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "presence_topic": "Broker presence topic"
+        },
+        "data_description": {
+          "presence_topic": "Topic filter where the broker announces the faucet connecting and disconnecting. The last topic level must be connected or disconnected. Leave empty if your broker has none."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": { "name": "Connected" },
+      "water_running": { "name": "Water running" }
+    },
+    "button": {
+      "dispense": { "name": "Dispense" }
+    },
+    "number": {
+      "dispense_amount": { "name": "Dispense amount" }
+    },
+    "sensor": {
+      "last_usage": { "name": "Last usage" },
+      "mcu_firmware": { "name": "Faucet firmware" },
+      "bundle_version": { "name": "Firmware bundle" },
+      "wifi_os": { "name": "Wi-Fi module OS" },
+      "reset_reason": { "name": "Last reset reason" }
+    }
+  },
+  "exceptions": {
+    "unknown_device": {
+      "message": "That device is not a loaded Local Delta faucet."
+    },
+    "dispense_out_of_range": {
+      "message": "{ml} mL is outside the allowed range of {min}-{max} mL."
+    }
+  },
+  "services": {
+    "dispense": {
+      "name": "Dispense",
+      "description": "Run a measured amount of water.",
+      "fields": {
+        "device_id": { "name": "Faucet", "description": "The faucet to dispense from." },
+        "amount": { "name": "Amount", "description": "How much water to run." },
+        "unit": { "name": "Unit", "description": "The unit of the amount." }
+      }
+    },
+    "send_command": {
+      "name": "Send raw command",
+      "description": "Publish a raw command to the faucet, for exploring its protocol. The faucet matches the text literally.",
+      "fields": {
+        "device_id": { "name": "Faucet", "description": "The faucet to send to." },
+        "payload": { "name": "Payload", "description": "The exact text to send." }
+      }
+    }
+  }
+}

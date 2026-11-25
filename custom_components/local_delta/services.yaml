@@ -1,0 +1,39 @@
+dispense:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: local_delta
+    amount:
+      required: true
+      example: 8
+      selector:
+        number:
+          min: 0
+          max: 4000
+          step: 0.1
+          mode: box
+    unit:
+      default: mL
+      selector:
+        select:
+          options:
+            - mL
+            - L
+            - fl. oz.
+            - cups
+            - gal
+send_command:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: local_delta
+    payload:
+      required: true
+      example: '{"dispense": "100"}'
+      selector:
+        text:
+          multiline: true

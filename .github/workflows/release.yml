@@ -1,0 +1,42 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  hacs-zip:
+    name: attach local_delta.zip
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Check the version against the tag
+        run: |
+          expected="${TAG#v}"
+          actual="$(jq -r '.version' custom_components/local_delta/manifest.json)"
+          if [ "$expected" != "$actual" ]; then
+            echo "::error::tag ${TAG} expects manifest version ${expected}, found ${actual}"
+            exit 1
+          fi
+
+      - name: Build local_delta.zip
+        run: |
+          cd custom_components/local_delta
+          zip -r -q -X "${GITHUB_WORKSPACE}/local_delta.zip" . \
+            -x '*__pycache__*' -x '*.pyc' -x 'AGENTS.md' -x 'CLAUDE.md'
+          unzip -l "${GITHUB_WORKSPACE}/local_delta.zip" | head -20
+
+      - name: Attach it to the release
+        run: gh release upload "$TAG" local_delta.zip --clobber

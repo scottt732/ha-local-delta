@@ -1,0 +1,6 @@
+{
+  "name": "Local Delta Faucet",
+  "homeassistant": "2026.8.0",
+  "zip_release": true,
+  "filename": "local_delta.zip"
+}

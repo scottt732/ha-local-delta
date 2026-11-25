@@ -1,0 +1,13 @@
+{
+  "domain": "local_delta",
+  "name": "Local Delta Faucet",
+  "codeowners": ["@scottt732"],
+  "config_flow": true,
+  "dependencies": ["mqtt"],
+  "documentation": "https://github.com/scottt732/ha-local-delta",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/scottt732/ha-local-delta/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
